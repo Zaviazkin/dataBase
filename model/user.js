@@ -10,10 +10,14 @@ const userSchema = new schema({
     type: String,
     required: true,
   },
+  passwordRepeat: {
+    type: String,
+    required: true,
+  },
   email: {
     type: String,
     required: true,
-    unique : true,
+    unique: true,
   },
 });
 
