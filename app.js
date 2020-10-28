@@ -1,22 +1,17 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
-const {registerUser} = require('./controllers/authorization')
+
+const { router } = require("./routes/routes");
 
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use("/api", router);
 
 const PORT = process.env.PORT || 5050;
-
-const {getUsers} = require('./controllers/userGet')
-
-
-app.post('/api/register-user', registerUser)
-
-app.get('/api/users', getUsers)
 
 async function startApp() {
   try {
@@ -33,7 +28,7 @@ async function startApp() {
     console.log(e);
     process.exit(1);
   } finally {
-    console.log('Hello epta');
+    console.log("Hello epta");
   }
 }
 
