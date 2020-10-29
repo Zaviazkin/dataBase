@@ -5,18 +5,29 @@ const { registerUser } = require("../controllers/authorization");
 const { registerAuthor } = require("../controllers/authorAuthorization");
 
 const { getUsers, getOneUser } = require("../controllers/userGet");
-const { getAuthors } = require("../controllers/authorGet");
-
-
-router.get('/user/:id', getOneUser)
+const { getPosts, getOnePost } = require("../controllers/authorGet");
 
 
 
-router.post("/api/register-user", registerUser);
-router.post("/api/register-author", registerAuthor);
 
-router.get("/users", getUsers);
-router.get("/authors", getAuthors);
+const timeMiddleware = function (req, res, next) {
+    req.requestTime = new Date().toUTCString();
+    next();
+  };
+
+
+
+
+
+router.get('/user/:id',  getOneUser)
+router.get('/post/:id', timeMiddleware, getOnePost)
+
+
+router.post("/register-user", timeMiddleware, registerUser);
+router.post("/register-author", timeMiddleware, registerAuthor);
+
+router.get("/users",timeMiddleware, getUsers);
+router.get("/posts", timeMiddleware, getPosts);
 
 module.exports = {
   router,

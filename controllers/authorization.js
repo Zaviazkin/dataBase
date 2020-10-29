@@ -1,6 +1,7 @@
 const { User } = require("../model/user");
 
 async function registerUser(req, res) {
+    const time = req.requestTime
   const { surname, email, password, passwordRepeat, lastname } = req.body;
   if (surname.trim() === "") {
     return res
@@ -54,16 +55,16 @@ async function registerUser(req, res) {
     });
     return res
       .status(200)
-      .json({ message: "Пользователь успешно сохранен", user: user });
+      .json({ time, message: "Пользователь успешно сохранен", user: user });
   } else {
     return res.status(400).json({ message: "Неправильно заполнены поля" });
   }
 }
 
-async function Login(req, res) {
-    // в req.body email, password
-    // email и пороль 
-}
+// async function Login(req, res) {
+//     // в req.body email, password
+//     // email и пороль 
+// }
 module.exports = {
   registerUser,
 };

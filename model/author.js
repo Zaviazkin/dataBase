@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 
-const authorSchema = new schema({
+const postSchema = new schema({
   author: {
     type: String,
     default: " ",
@@ -20,13 +20,17 @@ const authorSchema = new schema({
     type: String,
     required: true,
   },
+  viewCount: {
+    type: Number,
+    default: 0
+  },
   commentary: {
     type: String,
   },
 });
 
-const Author = mongoose.model("author", authorSchema);
+const Post = mongoose.model("post", postSchema);
 
 module.exports = {
-    Author,
+    Post,
 };
