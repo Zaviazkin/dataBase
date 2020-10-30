@@ -1,7 +1,7 @@
 const { Post } = require("../model/author");
 
 async function registerAuthor(req, res) {
-    const time = req.requestTime
+  const time = req.requestTime;
   const { author, dateOfCeated, title, content, commentary } = req.body;
   if (author.trim() === "") {
     return res
@@ -31,7 +31,7 @@ async function registerAuthor(req, res) {
         .status(400)
         .json({ message: "Новость с таким заголовком уже существует" });
     }
-   
+
     const authorr = await Post.create({
       author: author,
       dateOfCeated: dateOfCeated,

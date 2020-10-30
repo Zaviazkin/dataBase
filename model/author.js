@@ -22,7 +22,7 @@ const postSchema = new schema({
   },
   viewCount: {
     type: Number,
-    default: 0
+    default: 0,
   },
   commentary: {
     type: String,
@@ -32,5 +32,5 @@ const postSchema = new schema({
 const Post = mongoose.model("post", postSchema);
 
 module.exports = {
-    Post,
+  Post,
 };

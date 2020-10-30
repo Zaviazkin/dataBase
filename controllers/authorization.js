@@ -1,7 +1,7 @@
 const { User } = require("../model/user");
 
 async function registerUser(req, res) {
-    const time = req.requestTime
+  const time = req.requestTime;
   const { surname, email, password, passwordRepeat, lastname } = req.body;
   if (surname.trim() === "") {
     return res
@@ -63,7 +63,7 @@ async function registerUser(req, res) {
 
 // async function Login(req, res) {
 //     // в req.body email, password
-//     // email и пороль 
+//     // email и пороль
 // }
 module.exports = {
   registerUser,
