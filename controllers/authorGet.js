@@ -18,13 +18,51 @@ async function getOnePost(req, res) {
     if (!post) {
       throw "Новость не найдена";
     }
+
+    post.viewCount++;
+    await post.save();
+
+    // const updatedPost = await Post.findOneAndUpdate(
+    //   { _id: id },
+    //   { viewCount: post.viewCount + 1 },
+    //   { new: true }
+    // );
+
+    return res.status(200).json({ time, post });
+  } catch (e) {
+    res.status(400).json(e);
+  }
+}
+
+async function setOnePost(req, res) {
+  try {
+    const { id } = req.params;
+
+    const time = req.requestTime;
+
+    const newPost = req.body;
+
     const updatedPost = await Post.findOneAndUpdate(
       { _id: id },
-      { viewCount: post.viewCount + 1 },
+      {
+        author: newPost.author,
+        dateOfCeated: newPost.dateOfCeated,
+        title: newPost.title,
+        content: newPost.content,
+        commentary: newPost.commentary,
+      },
       { new: true }
     );
 
-    return res.status(200).json({ time, updatedPost });
+    console.log(updatedPost);
+
+    if (!updatedPost) {
+      throw "Новость не найдена";
+    }
+
+    return res
+      .status(200)
+      .json({ time, message: "Новость успешно изменена", updatedPost });
   } catch (e) {
     res.status(400).json(e);
   }
@@ -33,4 +71,5 @@ async function getOnePost(req, res) {
 module.exports = {
   getPosts,
   getOnePost,
+  setOnePost,
 };
