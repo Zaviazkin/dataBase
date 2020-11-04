@@ -1,4 +1,4 @@
-const { Post } = require("../model/author");
+const { Post } = require("../model/post");
 
 async function getPosts(req, res) {
   const posts = await Post.find();
@@ -46,7 +46,6 @@ async function setOnePost(req, res) {
       { _id: id },
       {
         author: newPost.author,
-        dateOfCeated: newPost.dateOfCeated,
         title: newPost.title,
         content: newPost.content,
         commentary: newPost.commentary,
@@ -54,7 +53,6 @@ async function setOnePost(req, res) {
       { new: true }
     );
 
-    console.log(updatedPost);
 
     if (!updatedPost) {
       throw "Новость не найдена";
@@ -68,8 +66,31 @@ async function setOnePost(req, res) {
   }
 }
 
+
+async function findOnePostDelete(req, res) {
+  try {
+    const { id } = req.params;
+
+    const time = req.requestTime;
+
+    const deletedPost = await Post.findById(id);
+
+
+    if (!deletedPost) {
+      throw "Новость не найдена";
+    }
+    deletedPost.deleteOne()
+    return res
+      .status(200)
+      .json({ time, message: "Новость успешно удалена" });
+  } catch (e) {
+    res.status(400).json(e);
+  }
+}
+
 module.exports = {
   getPosts,
   getOnePost,
   setOnePost,
+  findOnePostDelete
 };

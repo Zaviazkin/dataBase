@@ -1,17 +1,12 @@
-const { Post } = require("../model/author");
+const { Post } = require("../model/post");
 
 async function registerAuthor(req, res) {
   const time = req.requestTime;
-  const { author, dateOfCeated, title, content, commentary } = req.body;
+  const { author, title, content, commentary } = req.body;
   if (author.trim() === "") {
     return res
       .status(400)
       .json({ message: "Неправильно заполнено поле author" });
-  }
-  if (dateOfCeated.trim() === "") {
-    return res
-      .status(400)
-      .json({ message: "Неправильно заполнено поле dateOfCeated" });
   }
   if (title.trim() === "") {
     return res
@@ -23,7 +18,7 @@ async function registerAuthor(req, res) {
       .status(400)
       .json({ message: "Неправильно заполнено поле content" });
   }
-  if (author && dateOfCeated && title && content) {
+  if (author && title && content) {
     console.log(req.body);
     const existingAuthor = await Post.findOne({ title });
     if (existingAuthor) {
@@ -34,11 +29,14 @@ async function registerAuthor(req, res) {
 
     const authorr = await Post.create({
       author: author,
-      dateOfCeated: dateOfCeated,
       title: title,
       content: content,
       commentary: commentary,
     });
+
+    authorr.createdAt;
+    authorr.updatedAt;
+
     return res
       .status(200)
       .json({ time, message: "Новость успешно сохранена", author: authorr });
