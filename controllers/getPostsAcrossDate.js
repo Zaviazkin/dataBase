@@ -4,8 +4,6 @@ async function getPostsAcrossDate(req, res) {
   try {
     const time = req.requestTime;
 
-    
-    
     const date = req.body;
 
     const startDate = date.startDate.split(".").reverse().join(",");
@@ -13,7 +11,8 @@ async function getPostsAcrossDate(req, res) {
 
     const dateStart = new Date(startDate);
     const dateEnd = new Date(endDate);
-
+    console.log(dateStart);
+    console.log(dateEnd);
     if (date.startDate.slice(0, 2) > 31 || date.endDate.slice(0, 2) > 31) {
       throw "Неверно указаны дни";
     }
@@ -26,27 +25,16 @@ async function getPostsAcrossDate(req, res) {
     ) {
       throw "Неверно указан год";
     }
-    const posts = await Post.find()
-    let a = [];
-    for (let i = 0; i <= posts.length; i++) {
-        console.log(1);
-      if (
-        +posts[i].createdAt >= +dateStart &&
-        +posts[i].createdAt <= +dateEnd
-      ) {
-          console.log(2);
-        a.push(posts[i]);
-      }
+    const posts = await Post.find({
+      updatedAt: { $gt: startDate, $lt: endDate },
+    });
+
+    if (posts) {
+      return res.status(200).json({ time, posts });
     }
-    console.log(a);
-    console.log(posts);
-    return a ? res.status(200).json({ time, a }) : "Новости не найдены";
-    // console.log(a);
-    // if(!a) {
-    //     throw "Новости не найдены";
-    //     }
-    //   const time = req.requestTime;
-    //   return res.status(200).json({ time, a });
+    if (!posts) {
+      throw "Новости не найдены";
+    }
   } catch (e) {
     res.status(400).json(e.message);
     console.log(e);

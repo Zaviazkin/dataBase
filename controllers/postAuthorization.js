@@ -1,4 +1,5 @@
-const { Post } = require("../model/post");
+const { Post, Counter } = require("../model/post");
+const mongoose = require("mongoose");
 
 async function registerAuthor(req, res) {
   const time = req.requestTime;
@@ -27,11 +28,18 @@ async function registerAuthor(req, res) {
         .json({ message: "Новость с таким заголовком уже существует" });
     }
 
+    const counter = await Counter.create({
+      _id: new mongoose.Types.ObjectId(),
+      vieCounter: 0,
+    });
+
     const authorr = await Post.create({
+      _id: new mongoose.Types.ObjectId(),
       author: author,
       title: title,
       content: content,
       commentary: commentary,
+      vieCounter: counter._id,
     });
 
     authorr.createdAt;

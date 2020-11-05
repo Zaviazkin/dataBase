@@ -1,4 +1,4 @@
-const { Post } = require("../model/post");
+const { Post, Counter } = require("../model/post");
 
 async function getPosts(req, res) {
   const posts = await Post.find();
@@ -13,21 +13,15 @@ async function getOnePost(req, res) {
     console.log(id);
     const time = req.requestTime;
 
-    const post = await Post.findById(id);
+    const post = await Post.findById(id).populate("vieCounter");
     console.log(post);
     if (!post) {
       throw "Новость не найдена";
     }
-
-    post.viewCount++;
-    await post.save();
-
-    // const updatedPost = await Post.findOneAndUpdate(
-    //   { _id: id },
-    //   { viewCount: post.viewCount + 1 },
-    //   { new: true }
-    // );
-
+    await Counter.findByIdAndUpdate(
+      { _id: post.vieCounter._id },
+      { vieCounter: post.vieCounter.vieCounter + 1 }
+    );
     return res.status(200).json({ time, post });
   } catch (e) {
     res.status(400).json(e);
@@ -53,7 +47,6 @@ async function setOnePost(req, res) {
       { new: true }
     );
 
-
     if (!updatedPost) {
       throw "Новость не найдена";
     }
@@ -66,7 +59,6 @@ async function setOnePost(req, res) {
   }
 }
 
-
 async function findOnePostDelete(req, res) {
   try {
     const { id } = req.params;
@@ -75,14 +67,11 @@ async function findOnePostDelete(req, res) {
 
     const deletedPost = await Post.findById(id);
 
-
     if (!deletedPost) {
       throw "Новость не найдена";
     }
-    deletedPost.deleteOne()
-    return res
-      .status(200)
-      .json({ time, message: "Новость успешно удалена" });
+    deletedPost.deleteOne();
+    return res.status(200).json({ time, message: "Новость успешно удалена" });
   } catch (e) {
     res.status(400).json(e);
   }
@@ -92,5 +81,5 @@ module.exports = {
   getPosts,
   getOnePost,
   setOnePost,
-  findOnePostDelete
+  findOnePostDelete,
 };
