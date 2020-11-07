@@ -18,13 +18,17 @@ const postSchema = new Schema(
       type: String,
       required: true,
     },
-    commentary: {
-      type: String,
-    },
+
     vieCounter: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "counter",
     },
+    commentary: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment",
+      },
+    ],
   },
   { timestamps: true }
 );
@@ -37,10 +41,22 @@ const newsCounterSchema = new Schema({
   },
 });
 
+const commentSchema = new Schema({
+  user: { type: String, default: " " },
+  comment: { type: String, default: " " },
+  post: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Post",
+  },
+  dateofCreated: { type: Date, required: true, default: Date.now },
+});
+
 const Counter = mongoose.model("counter", newsCounterSchema);
 const Post = mongoose.model("post", postSchema);
+const Comment = mongoose.model("Comment", commentSchema);
 
 module.exports = {
   Post,
   Counter,
+  Comment,
 };
