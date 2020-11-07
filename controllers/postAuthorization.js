@@ -1,9 +1,9 @@
-const { Post, Counter } = require("../model/post");
+const { Post, Counter, Comment } = require("../model/post");
 const mongoose = require("mongoose");
 
 async function registerAuthor(req, res) {
   const time = req.requestTime;
-  const { author, title, content, commentary } = req.body;
+  const { author, title, content } = req.body;
   if (author.trim() === "") {
     return res
       .status(400)
@@ -38,8 +38,8 @@ async function registerAuthor(req, res) {
       author: author,
       title: title,
       content: content,
-      commentary: commentary,
       vieCounter: counter._id,
+      commentary: [],
     });
 
     authorr.createdAt;
@@ -47,7 +47,7 @@ async function registerAuthor(req, res) {
 
     return res
       .status(200)
-      .json({ time, message: "Новость успешно сохранена", author: authorr });
+      .json({ time, message: "Новость успешно сохранена", post: authorr });
   } else {
     return res.status(400).json({ message: "Неправильно заполнены поля" });
   }
